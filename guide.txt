@@ -1,0 +1,14 @@
+This is a guide on how to use the bot with the right commands. Use a microphone and talk to the bot.
+
+-------------------------------------------------------------------
+
+- To create a new variable:
+New variable name <var-name> value <value> type <type>
+
+- To print out something (a variable or normally just something):
+Print <var-name>
+Print <Something you want to print out>
+
+- To call a method:
+Method call name <method-name>
+Method call name <method-name> argument <argument-value> type <argument-type> argument <argument-value> type <argument-type> ...
