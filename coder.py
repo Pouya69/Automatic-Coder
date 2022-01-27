@@ -60,7 +60,7 @@ def method_parameter_processor(text_words, from_command):
 
 
 def add_imports(code, programming_language):
-    import_string = """"""
+    import_string = ""
     for item in imports:
         if programming_language == "java":
             import_string += f"import {item};\n"
@@ -68,8 +68,7 @@ def add_imports(code, programming_language):
             import_string += f"#include <{item}>\n"
         elif programming_language == "python":
             import_string += f"import {item}\n"
-    code = f"{import_string}\n\n{code}"
-    return code
+    return import_string
 
 
 if __name__ == '__main__':
@@ -175,7 +174,7 @@ if __name__ == '__main__':
             break
 
     print("[+] Adding the imports...")
-    main_code = add_imports(main_code, user_choice)
+    beginning_code = add_imports(main_code, user_choice) + beginning_code
     print("[+] Finalizing the code...")
     if user_choice == "java":
         final_code = beginning_code + main_code + "\n\t}\n}"
