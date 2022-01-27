@@ -44,12 +44,12 @@ def method_parameter_processor(text_words, from_command):
         try:
             for i in range(len(text_words)):
                 if text_words[i] == "parameter" or text_words[i] == "argument":
-                    par_type = text_words[text_words[i:].index("type") + 1]
-                    par_value = "_".join(text_words[text_words[i:].index("value")+1 : text_words[i:].index("type")])
+                    par_type = text_words[text_words[i:].index("type") + 1 + i]
+                    par_value = "_".join(text_words[text_words[i:].index("argument") + 1 + i: text_words[i:].index("type") + i])
                     params[str(param_count)] = {"value": par_value, "type": par_type}
                     param_count += 1
                 i += 1
-            for key, param in params:
+            for key, param in params.items():
                 if not list(params.keys()).index(key) == 0:
                     param_text += ", "
                 param_text += f"\"{param['value']}\"" if param['type'] == "string" else f"{param['value']}"
@@ -95,8 +95,15 @@ if __name__ == '__main__':
         elif text.startswith("method call"):
             method_text = ""
             try:
-                method_name = "_".join(text_words[text_words.index("name")+1 : text_words.index("name")+3])
-                method_text += f"{method_name}({method_parameter_processor(text, from_command='method call')}"
+                try:
+                    method_name = "_".join(text_words[text_words.index("name")+1 : text_words.index("argument")])
+                except:
+                    method_name = "_".join(text_words[text_words.index("name")+1 : ])
+                # TODO: For now it doesn't matter testing
+                # if method_name not in methods:
+                #     print(f"[-] Method {method_name} does not exist")
+                #     continue
+                method_text += f"{method_name}({method_parameter_processor(text_words, from_command='method call')}"
             except:
                 continue
             if user_choice == "java":
@@ -108,6 +115,7 @@ if __name__ == '__main__':
             elif user_choice == "python":
                 method_text += ")"
                 main_code += f"{method_text}\n"
+            print(f"[+] New Method added: {method_name}")
         elif text.startswith("new method"):
             # TODO
             method_text = ""
@@ -159,6 +167,7 @@ if __name__ == '__main__':
                         main_code = main_code + f"""print({print_object})\n"""
                 else:
                     print(f"[-] Variable {print_object} does not exist")
+                    continue
             else:
                 print_object = " ".join(text_words[text_words.index("print")+1:])
                 if user_choice == "java":
@@ -167,7 +176,6 @@ if __name__ == '__main__':
                     main_code = main_code + f"std::cout << \"{print_object}\";\n\t"
                 elif user_choice == "python":
                     main_code = main_code + f"print(\"{print_object}\")\n"
-
             print("[+] Added print")
         elif text == "exit the program" or text == "stop the program" or text == "stop listening":
             print("[*] Stopping the program...")
